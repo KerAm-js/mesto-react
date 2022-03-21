@@ -1,41 +1,15 @@
 import React from "react";
-import Logo from './images/VectorLogo.svg';
+import Header from "./Header";
+import Main from "./Main";
+import Footer from "./Footer";
 
 function App() {
   return (
     <div className="App">
-      <header className="header">
-        <img className="logo" src={Logo} alt="Логотип"/>
-      </header>
-
-      <main className="content">
-        <section className="profile">
-          <div className="profile__avatar-wrapper">
-            <img className="profile__avatar" src="#" alt="Аватарка"/>
-            <button className="button profile__edit-avatar-btn"></button>
-          </div>
-          <div className="profile__info">
-            <h1 className="profile__username">
-            </h1>
-            <button aria-label="редактировать профиль" type="button" className="button profile__edit-button">
-            </button>
-            <p className="profile__about">
-            </p>
-          </div>
-          <button type="button" aria-label="добавить пост" className="button profile__add-place-button">
-          </button>
-        </section>
-
-        <section className="elements"> 
-          <ul className="elements__list">
-          </ul>
-        </section>
-
-      </main>
-
-      <footer className="footer">
-        <p className="footer__copyright">&copy; 2020 Mesto Russia</p>
-      </footer>
+      
+      <Header />
+      <Main />
+      <Footer />
 
       <div className="modal modal_type_profile">
         <div className="modal__block">
