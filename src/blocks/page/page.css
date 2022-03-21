@@ -1,0 +1,31 @@
+.page {
+  width: 100%;
+  max-width: 880px;
+  min-width: 320px;
+  box-sizing: border-box;
+  padding: 45px 0 60px;
+  color: #ffffff;
+  font-family: Inter, Arial, sans-serif;
+}
+
+@media screen and (max-width: 1024px) {
+  .page {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .page {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@media screen and (max-width: 410px) {
+  .page {
+    padding-top: 28px;
+    padding-bottom: 36px;
+  }
+}
+
