@@ -1,10 +1,10 @@
 import React from 'react';
-import Logo from '../images/VectorLogo.svg';
+import logo from '../images/VectorLogo.svg';
 
 export default function Header() {
   return (
     <header className="header">
-      <img className="logo" src={Logo} alt="Логотип"/>
+      <img className="logo" src={logo} alt="Логотип"/>
     </header>
   )
 }

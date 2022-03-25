@@ -4,9 +4,9 @@ import Card from "./Card";
 
 export default function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick}) {
 
-  const [userAvatar, setUserAvatar] = useState();
-  const [userDescription, setUserDesceiption] = useState();
-  const [userName, setUserName] = useState();
+  const [userAvatar, setUserAvatar] = useState('');
+  const [userDescription, setUserDesceiption] = useState('');
+  const [userName, setUserName] = useState('');
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
@@ -19,8 +19,8 @@ export default function Main({onEditAvatar, onEditProfile, onAddPlace, onCardCli
       .catch(e => console.log(e));
 
     Api.getCards()
-      .then(cardsS => {
-        setCards(cardsS)
+      .then(cards => {
+        setCards(cards)
       })
       .catch(e => console.log(e))
   }, [])
@@ -48,7 +48,7 @@ export default function Main({onEditAvatar, onEditProfile, onAddPlace, onCardCli
       <section className="elements"> 
         <ul className="elements__list">
           {
-            cards.map(item => <Card key={item._id} card={item} onCardClick={onCardClick} />)
+            cards.map(item => (<Card key={item._id} card={item} onCardClick={onCardClick} />))
           }
         </ul>
       </section>
