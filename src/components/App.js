@@ -3,32 +3,35 @@ import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
+import ImagePopup from "./ImagePopup";
 
 function App() {
-
   const [isEditProfilePopupOpened, setIsEditProfilePopupOpened] = useState(false);
   const [isEditAvatarPopupOpened, setIsEditAvatarPopupOpened] = useState(false);
   const [isAddPlaceopupOpened, setIsAddPlaceopupOpened] = useState(false);
+  const [selectedCard, setSelectedCard] = useState();
 
   const handleEditAvatarClick = () => {
-    // document.querySelector('.modal_type_avatar').classList.add('modal_opened')
     setIsEditAvatarPopupOpened(true);
   }
 
   const handleEditProfileClick = () => {
-    // document.querySelector('.modal_type_profile').classList.add('modal_opened')
     setIsEditProfilePopupOpened(true);
   }
 
   const handleAddPlaceClick = () => {
-    // document.querySelector('.modal_type_place').classList.add('modal_opened')
     setIsAddPlaceopupOpened(true);
+  }
+
+  const handleCardClick = card => {
+    setSelectedCard(card);
   }
 
   const closeAllPopups = () => {
     setIsEditAvatarPopupOpened(false);
     setIsEditProfilePopupOpened(false);
     setIsAddPlaceopupOpened(false);
+    setSelectedCard(null);
   }
 
   return (
@@ -39,6 +42,7 @@ function App() {
         onEditAvatar={handleEditAvatarClick} 
         onEditProfile={handleEditProfileClick} 
         onAddPlace={handleAddPlaceClick} 
+        onCardClick={handleCardClick}
       />
       <Footer />
 
@@ -112,13 +116,7 @@ function App() {
             </button>
       </PopupWithForm>
 
-      <div className="modal modal_type_image">
-        <div className="modal__content-layout">
-          <img src="#" alt="картинка" className="modal__image"/>
-          <button type="button" aria-label="закрыть" className="button modal__close-button"></button>
-          <p className="modal__place-name"></p>
-        </div>
-      </div>
+      <ImagePopup selectedCard={selectedCard} onClose={closeAllPopups}/>
 
       <div className="modal modal_type_confirm">
         <div className="modal__block">
@@ -133,23 +131,7 @@ function App() {
           </form>
         </div>
       </div>
-      
-      <template id="element">
-        <li className="element">
-          <div className="element__image"></div>
-          <button type="button" aria-label="удалить" className="button element__delete-button"></button>
-          <div className="element__info">
-            <h2 className="element__title">
-              
-            </h2>
-            <div className="element__like-container">
-              <button type="button" aria-label="лайк" className="button element__like-button">
-              </button>
-              <p className="element__like-count"></p>
-            </div>
-          </div>
-        </li>
-      </template>
+
     </div>
   );
 }
