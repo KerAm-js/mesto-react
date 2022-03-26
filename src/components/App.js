@@ -139,20 +139,6 @@ function App() {
         submitBtnSelectorType='confirm'
       />
 
-      <div className="modal modal_type_confirm">
-        <div className="modal__block">
-          <h2 className="modal__title">
-            Вы уверены?
-          </h2>
-          <button type="button" aria-label="закрыть" className="button modal__close-button"></button>
-          <form noValidate name="formConfirm" className="form form_type_confirm">
-            <button type="submit" aria-label="да" className="button form__button form__button_type_confirm">
-              Да
-            </button>
-          </form>
-        </div>
-      </div>
-
     </div>
   );
 }
