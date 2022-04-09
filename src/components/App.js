@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
+import api from "../utils/api";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function App() {
   const [isEditProfilePopupOpened, setIsEditProfilePopupOpened] = useState(false);
@@ -11,6 +13,13 @@ function App() {
   const [isAddPlaceopupOpened, setIsAddPlaceopupOpened] = useState(false);
   const [isConfirmPopupOpened, setIsConfirmPopupOpened] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [currentUser, setCurrentUser] = useState({
+    name: '',
+    avatar: '',
+    about: '',
+    _id: '',
+    cohort: '',
+  });
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpened(true);
@@ -36,8 +45,14 @@ function App() {
     setSelectedCard(null);
   }
 
+  useEffect(() => {
+    api.getUserData()
+      .then(data => setCurrentUser(data))
+      .catch(e => console.log(e))
+  }, [])
+
   return (
-    <div className="App">
+    <CurrentUserContext.Provider className="App" value={currentUser}>
       
       <Header />
       <Main 
@@ -139,7 +154,7 @@ function App() {
         submitBtnSelectorType='confirm'
       />
 
-    </div>
+    </CurrentUserContext.Provider>
   );
 }
 
