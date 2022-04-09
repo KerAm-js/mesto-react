@@ -2,8 +2,11 @@ import React, { useContext } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 
-const Card = ({card, onCardClick}) => {
+const Card = ({card, onCardClick, onCardLike, onCardDelete}) => {
   const cardClickHandler = () => onCardClick(card);
+  const cardLikeHandler = () => onCardLike(card);
+  const cardDeleteHadnler = () => onCardDelete(card._id);
+  
   const currentUser = useContext(CurrentUserContext);
 
   const isOwn = currentUser._id === card.owner._id;
@@ -14,14 +17,14 @@ const Card = ({card, onCardClick}) => {
     <li className="element">
       <div className="element__image" style={{ backgroundImage: `url(${card.link})` }} onClick={cardClickHandler} />
       {
-        isOwn && (<button type="button" aria-label="удалить" className="button element__delete-button"></button>)
+        isOwn && (<button onClick={cardDeleteHadnler} type="button" aria-label="удалить" className="button element__delete-button"></button>)
       }
       <div className="element__info">
         <h2 className="element__title">
           {card.name}
         </h2>
         <div className="element__like-container">
-          <button type="button" aria-label="лайк" className={likeBtnClass}>
+          <button onClick={cardLikeHandler} type="button" aria-label="лайк" className={likeBtnClass}>
           </button>
           <p className="element__like-count">{card.likes.length}</p>
         </div>
