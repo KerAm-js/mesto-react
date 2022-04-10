@@ -22,7 +22,7 @@ const EditProfilePopup = ({isOpened, onClose, onUpdateUser}) => {
   useEffect(() => {
     setName(currentUser.name);
     setDescription(currentUser.about);
-  }, [currentUser])
+  }, [currentUser, isOpened])
 
   return (
     <PopupWithForm 
@@ -35,7 +35,7 @@ const EditProfilePopup = ({isOpened, onClose, onUpdateUser}) => {
       >
         <input 
           placeholder="имя" 
-          value={name}
+          value={name || ''}
           onChange={onChangeName}
           required
           name="username" 
@@ -48,7 +48,7 @@ const EditProfilePopup = ({isOpened, onClose, onUpdateUser}) => {
         <span className="form__error username-error">Заполните это поле</span>
         <input 
           placeholder="описание" 
-          value={description}
+          value={description || ''}
           onChange={onChangeDescription}
           required
           name="description" 

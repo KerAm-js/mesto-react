@@ -83,11 +83,11 @@ function App() {
     const isLiked = card.likes.some(user => user._id === currentUser._id);
     if (!isLiked) {
       api.setLike(card._id)
-        .then(card => setCards(cards.map(item => item._id === card._id ? card : item)))
+        .then(card => setCards(prev => prev.map(item => item._id === card._id ? card : item)))
         .catch(e => console.log(e))
     } else {
       api.deleteLike(card._id)
-        .then(card => setCards(cards.map(item => item._id === card._id ? card : item)))
+        .then(card => setCards(prev => prev.map(item => item._id === card._id ? card : item)))
         .catch(e => console.log(e))
     }
   }
@@ -97,8 +97,8 @@ function App() {
     setAction(() => {
       return () => {
         api.deleteCard(id)
-          .then(() => setCards(cards.filter(card => card._id !== id)))
-          .then(e => console.log(e))
+          .then(() => setCards(prev => prev.filter(card => card._id !== id)))
+          .catch(e => console.log(e))
       }
     })
   }
