@@ -6,6 +6,7 @@ const PopupWithForm = ({
   title, 
   isOpened, 
   onClose, 
+  onSubmit,
   submitBtnText, 
   isSubmitBtnDisabled,
   submitBtnSelectorType = 'form__button_type_save',
@@ -17,7 +18,7 @@ const PopupWithForm = ({
           {title}
         </h2>
         <button type="button" aria-label="закрыть" className="button modal__close-button" onClick={onClose}></button>
-        <form name={`form${name[0].toUpperCase()}${name.slice(1)}`} className={`form form_type_${name}`}>
+        <form onSubmit={onSubmit} name={`form${name[0].toUpperCase()}${name.slice(1)}`} className={`form form_type_${name}`}>
           {children}
           <button 
             disabled={isSubmitBtnDisabled}

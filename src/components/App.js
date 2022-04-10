@@ -6,6 +6,7 @@ import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import { EditProfilePopup } from "./EditProfilePopup";
 
 function App() {
   const [isEditProfilePopupOpened, setIsEditProfilePopupOpened] = useState(false);
@@ -45,6 +46,12 @@ function App() {
     setSelectedCard(null);
   }
 
+  const handleUpdateUser = ({name, about}) => {
+    api.editProfile(name, about)
+      .then(userData => setCurrentUser(userData))
+      .catch(e => console.log(e))
+  }
+
   useEffect(() => {
     api.getUserData()
       .then(data => setCurrentUser(data))
@@ -63,36 +70,11 @@ function App() {
       />
       <Footer />
 
-      <PopupWithForm 
-        name='profile' 
-        title='Редактировать профиль' 
-        isOpened={isEditProfilePopupOpened} 
+      <EditProfilePopup 
+        isOpened={isEditProfilePopupOpened}
         onClose={closeAllPopups}
-        submitBtnText="Сохранить"
-      >
-        <input 
-          placeholder="имя" 
-          required
-          name="username" 
-          id="username"
-          type="text" 
-          className="form__input form__input_value_username"
-          minLength="2"
-          maxLength="40"
-        />
-        <span className="form__error username-error">Заполните это поле</span>
-        <input 
-          placeholder="описание" 
-          required
-          name="description" 
-          id="description"
-          type="text" 
-          className="form__input form__input_value_about"
-          minLength="2"
-          maxLength="200"
-        />
-        <span className="form__error description-error">Заполните это поле</span>
-      </PopupWithForm>
+        onUpdateUser={handleUpdateUser}
+      />
 
       <PopupWithForm 
         name='avatar' 
