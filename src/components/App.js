@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import AddPlacePopup from "./AddPlacePopup";
+import ConfirmPopup from "./ConfirmPopup";
 
 function App() {
 
+  const [action, setAction] = useState(() => () => {});
   const [cards, setCards] = useState([]);
   const [isEditProfilePopupOpened, setIsEditProfilePopupOpened] = useState(false);
   const [isEditAvatarPopupOpened, setIsEditAvatarPopupOpened] = useState(false);
@@ -68,6 +69,16 @@ function App() {
       .catch(e => console.log(e))
   }
 
+  const handleActionConfirm = () => {
+    action();
+    closeConfirmPopupHanlder();
+  }
+
+  const closeConfirmPopupHanlder = () => {
+    setAction(() => () => {});
+    setIsConfirmPopupOpened(false);
+  }
+
   const handleCardLike = card => {
     const isLiked = card.likes.some(user => user._id === currentUser._id);
     if (!isLiked) {
@@ -82,9 +93,14 @@ function App() {
   }
 
   const handleCardDelete = id => {
-    api.deleteCard(id)
-      .then(() => setCards(cards.filter(card => card._id !== id)))
-      .then(e => console.log(e))
+    setIsConfirmPopupOpened(true);
+    setAction(() => {
+      return () => {
+        api.deleteCard(id)
+          .then(() => setCards(cards.filter(card => card._id !== id)))
+          .then(e => console.log(e))
+      }
+    })
   }
 
   useEffect(() => {
@@ -131,13 +147,10 @@ function App() {
 
       <ImagePopup selectedCard={selectedCard} onClose={closeAllPopups}/>
 
-      <PopupWithForm
-        name='confirm'
-        title='Вы уверены?'
+      <ConfirmPopup 
+        onConfirm={handleActionConfirm}
+        onClose={closeConfirmPopupHanlder}
         isOpened={isConfirmPopupOpened}
-        onClose={closeAllPopups}
-        submitBtnText='Да'
-        submitBtnSelectorType='confirm'
       />
 
     </CurrentUserContext.Provider>
