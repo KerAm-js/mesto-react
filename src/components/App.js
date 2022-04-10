@@ -4,9 +4,10 @@ import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
+import EditProfilePopup from "./EditProfilePopup";
+import EditAvatarPopup from "./EditAvatarPopup";
 import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { EditProfilePopup } from "./EditProfilePopup";
 
 function App() {
   const [isEditProfilePopupOpened, setIsEditProfilePopupOpened] = useState(false);
@@ -52,9 +53,15 @@ function App() {
       .catch(e => console.log(e))
   }
 
+  const handleUpdateAvatar = avatar => {
+    api.editAvatar(avatar) 
+      .then(userData => setCurrentUser(userData))
+      .catch(e => console.log(e))
+  }
+
   useEffect(() => {
     api.getUserData()
-      .then(data => setCurrentUser(data))
+      .then(userData => setCurrentUser(userData))
       .catch(e => console.log(e))
   }, [])
 
@@ -76,23 +83,11 @@ function App() {
         onUpdateUser={handleUpdateUser}
       />
 
-      <PopupWithForm 
-        name='avatar' 
-        title='Обновить аватар' 
-        isOpened={isEditAvatarPopupOpened} 
+      <EditAvatarPopup 
+        isOpened={isEditAvatarPopupOpened}
         onClose={closeAllPopups}
-        submitBtnText="Сохранить"
-      >
-        <input 
-          placeholder="Ссылка на картинку" 
-          required
-          name="avatarLink" 
-          id="avatar-link"
-          type="url" 
-          className="form__input form__input_value_avatar-link"
-        />
-        <span className="form__error avatar-link-error">Заполните это поле</span>
-      </PopupWithForm>
+        onUpdateAvatar={handleUpdateAvatar}
+      />
 
       <PopupWithForm 
         name='place' 
