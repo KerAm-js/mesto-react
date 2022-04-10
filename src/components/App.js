@@ -11,7 +11,7 @@ import AddPlacePopup from "./AddPlacePopup";
 import ConfirmPopup from "./ConfirmPopup";
 
 function App() {
-
+  
   const [action, setAction] = useState(() => () => {});
   const [cards, setCards] = useState([]);
   const [isEditProfilePopupOpened, setIsEditProfilePopupOpened] = useState(false);

@@ -22,7 +22,7 @@ const AddPlacePopup = ({isOpened, onClose, onAddPlace}) => {
       setName('');
       setLink('');
     }
-  }, [])
+  }, [isOpened])
  
   return (
     <PopupWithForm 
