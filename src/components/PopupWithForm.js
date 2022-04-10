@@ -11,6 +11,7 @@ const PopupWithForm = ({
   isSubmitBtnDisabled,
   submitBtnSelectorType = 'form__button_type_save',
 }) => {
+
   return (
     <div className={`modal modal_type_${name} ${isOpened ? 'modal_opened' : null}`}>
       <div className="modal__block">
