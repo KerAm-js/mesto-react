@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Main from "./Main";
+import Login from "./Login";
 import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import EditProfilePopup from "./EditProfilePopup";
@@ -12,9 +13,10 @@ import ConfirmPopup from "./ConfirmPopup";
 import { Route } from "react-router-dom";
 import { Switch } from "react-router-dom";
 import { Redirect } from "react-router-dom";
+import Register from "./Register";
 
 function App() {
-  
+
   const [logged, setLogged] = useState(false);
   const [action, setAction] = useState(() => () => {});
   const [cards, setCards] = useState([]);
@@ -23,6 +25,8 @@ function App() {
   const [isAddPlaceopupOpened, setIsAddPlaceopupOpened] = useState(false);
   const [isConfirmPopupOpened, setIsConfirmPopupOpened] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
   const [currentUser, setCurrentUser] = useState({
     name: '',
     avatar: '',
@@ -107,6 +111,9 @@ function App() {
     })
   }
 
+  const onAuthEmailChangeHandler = evt => setAuthEmail(evt.target.value);
+  const onAuthPasswordChangeHandler = evt => setAuthPassword(evt.target.value);
+
   useEffect(() => {
     api.getUserData()
       .then(userData => setCurrentUser(userData))
@@ -119,6 +126,7 @@ function App() {
   return (
     <CurrentUserContext.Provider className="App" value={currentUser}>
       <Header />
+
       <Switch>
         <Route 
           exact 
@@ -136,7 +144,7 @@ function App() {
                     onAddPlace={handleAddPlaceClick} 
                     onCardClick={handleCardClick}
                   />
-                : <Redirect to='sign-in' />
+                : <Redirect to='sign-up' />
             )
           }
         </Route>
@@ -144,17 +152,30 @@ function App() {
           exact 
           path="/sign-in" 
         >
-          <div />
+          <Login 
+            email={authEmail} 
+            setEmail={onAuthEmailChangeHandler}
+            password={authPassword}
+            setPassword={onAuthPasswordChangeHandler} 
+          />
         </Route>
         <Route 
           exact 
           path="/sign-up" 
         >
-          <div />
+          <Register 
+            email={authEmail} 
+            setEmail={onAuthEmailChangeHandler}
+            password={authPassword}
+            setPassword={onAuthPasswordChangeHandler} 
+          />
         </Route>
       </Switch>
-      <Footer />
-
+      
+      {
+        logged && <Footer />
+      }
+      
       <EditProfilePopup 
         isOpened={isEditProfilePopupOpened}
         onClose={closeAllPopups}
