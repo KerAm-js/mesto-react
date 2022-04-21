@@ -17,7 +17,7 @@ const EditAvatarPopup = ({
 
   useEffect(() => {
     link.current.value = '';
-    return () => link.current.value = '';
+    return () => {link.current.value = ''};
   })
 
   return (

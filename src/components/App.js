@@ -9,9 +9,13 @@ import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import AddPlacePopup from "./AddPlacePopup";
 import ConfirmPopup from "./ConfirmPopup";
+import { Route } from "react-router-dom";
+import { Switch } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 function App() {
   
+  const [logged, setLogged] = useState(false);
   const [action, setAction] = useState(() => () => {});
   const [cards, setCards] = useState([]);
   const [isEditProfilePopupOpened, setIsEditProfilePopupOpened] = useState(false);
@@ -114,17 +118,41 @@ function App() {
 
   return (
     <CurrentUserContext.Provider className="App" value={currentUser}>
-      
       <Header />
-      <Main 
-        cards={cards}
-        onCardDelete={handleCardDelete}
-        onCardLike={handleCardLike}
-        onEditAvatar={handleEditAvatarClick} 
-        onEditProfile={handleEditProfileClick} 
-        onAddPlace={handleAddPlaceClick} 
-        onCardClick={handleCardClick}
-      />
+      <Switch>
+        <Route 
+          exact 
+          path="/" 
+        >
+          {
+            () => (
+              logged
+                ? <Main 
+                    cards={cards}
+                    onCardDelete={handleCardDelete}
+                    onCardLike={handleCardLike}
+                    onEditAvatar={handleEditAvatarClick} 
+                    onEditProfile={handleEditProfileClick} 
+                    onAddPlace={handleAddPlaceClick} 
+                    onCardClick={handleCardClick}
+                  />
+                : <Redirect to='sign-in' />
+            )
+          }
+        </Route>
+        <Route 
+          exact 
+          path="/sign-in" 
+        >
+          <div />
+        </Route>
+        <Route 
+          exact 
+          path="/sign-up" 
+        >
+          <div />
+        </Route>
+      </Switch>
       <Footer />
 
       <EditProfilePopup 
@@ -152,7 +180,6 @@ function App() {
         onClose={closeConfirmPopupHanlder}
         isOpened={isConfirmPopupOpened}
       />
-
     </CurrentUserContext.Provider>
   );
 }
