@@ -2,7 +2,7 @@ import React from "react";
 import AuthForm from "./AuthForm";
 
 const Login = ({email, setEmail, password, setPassword}) => {
-
+  
   return (
     <div className="login">
       <AuthForm 

@@ -1,0 +1,14 @@
+.header__account-button {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  color: #fff;
+  background: none;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.header__account-button:hover {
+  opacity: 0.6;
+}

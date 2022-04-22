@@ -3,7 +3,7 @@
   color: #000;
   font-style: normal;
   font-weight: 400;
-  margin-top: 187px;
+  margin-top: 167px;
 }
 
 .form__button_type_auth:hover {
@@ -12,7 +12,8 @@
 
 @media screen and (max-width: 510px) {
   .form__button {
-    margin-top: 144px;
+    height: 46px;
+    margin-top: 124px;
     font-size: 16px;
     line-height: 19px;
   }

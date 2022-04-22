@@ -10,20 +10,22 @@ import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import AddPlacePopup from "./AddPlacePopup";
 import ConfirmPopup from "./ConfirmPopup";
-import { Route } from "react-router-dom";
-import { Switch } from "react-router-dom";
-import { Redirect } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Register from "./Register";
+import ProtectedRoute from "./ProtectedRoute";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
 
-  const [logged, setLogged] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [action, setAction] = useState(() => () => {});
   const [cards, setCards] = useState([]);
+  const [infoTooltip, setInfoTooltip] = useState('');
   const [isEditProfilePopupOpened, setIsEditProfilePopupOpened] = useState(false);
   const [isEditAvatarPopupOpened, setIsEditAvatarPopupOpened] = useState(false);
   const [isAddPlaceopupOpened, setIsAddPlaceopupOpened] = useState(false);
   const [isConfirmPopupOpened, setIsConfirmPopupOpened] = useState(false);
+  const [isInfoTooltipOpened, setIsInfoTooltipOpened] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
@@ -51,11 +53,17 @@ function App() {
     setSelectedCard(card);
   }
 
+  const openInfoTooltip = status => { 
+    setInfoTooltip(status ? 'success' : 'error');
+    setIsInfoTooltipOpened(true);
+  }
+
   const closeAllPopups = () => {
     setIsEditAvatarPopupOpened(false);
     setIsEditProfilePopupOpened(false);
     setIsAddPlaceopupOpened(false);
     setIsConfirmPopupOpened(false);
+    setIsInfoTooltipOpened(false);
     setSelectedCard(null);
   }
 
@@ -125,31 +133,12 @@ function App() {
 
   return (
     <CurrentUserContext.Provider className="App" value={currentUser}>
-      <Header />
-
+      <Header 
+        loggedIn={loggedIn}
+        email={authEmail}
+      />
       <Switch>
         <Route 
-          exact 
-          path="/" 
-        >
-          {
-            () => (
-              logged
-                ? <Main 
-                    cards={cards}
-                    onCardDelete={handleCardDelete}
-                    onCardLike={handleCardLike}
-                    onEditAvatar={handleEditAvatarClick} 
-                    onEditProfile={handleEditProfileClick} 
-                    onAddPlace={handleAddPlaceClick} 
-                    onCardClick={handleCardClick}
-                  />
-                : <Redirect to='sign-up' />
-            )
-          }
-        </Route>
-        <Route 
-          exact 
           path="/sign-in" 
         >
           <Login 
@@ -160,7 +149,6 @@ function App() {
           />
         </Route>
         <Route 
-          exact 
           path="/sign-up" 
         >
           <Register 
@@ -170,10 +158,22 @@ function App() {
             setPassword={onAuthPasswordChangeHandler} 
           />
         </Route>
+        <ProtectedRoute 
+          path="/"
+          loggedIn={loggedIn}
+          component={Main}
+          cards={cards}
+          onCardDelete={handleCardDelete}
+          onCardLike={handleCardLike}
+          onEditAvatar={handleEditAvatarClick} 
+          onEditProfile={handleEditProfileClick} 
+          onAddPlace={handleAddPlaceClick} 
+          onCardClick={handleCardClick}
+        />
       </Switch>
       
       {
-        logged && <Footer />
+        loggedIn && <Footer />
       }
       
       <EditProfilePopup 
@@ -200,6 +200,17 @@ function App() {
         onConfirm={handleActionConfirm}
         onClose={closeConfirmPopupHanlder}
         isOpened={isConfirmPopupOpened}
+      />
+
+      <InfoTooltip 
+        status={infoTooltip}
+        title={
+          infoTooltip === 'success' 
+            ? 'Вы успешно зарегистрировались!'
+            : 'Что-то пошло не так! Попробуйте ещё раз.'
+        }
+        isOpened={isInfoTooltipOpened}
+        onClose={closeAllPopups}
       />
     </CurrentUserContext.Provider>
   );
