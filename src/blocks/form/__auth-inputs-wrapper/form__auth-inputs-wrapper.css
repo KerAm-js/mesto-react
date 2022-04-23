@@ -1,6 +1,4 @@
-.page {
-  flex: 1;
+.form__auth-inputs-wrapper {
   display: flex;
   flex-direction: column;
 }
-

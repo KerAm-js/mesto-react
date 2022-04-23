@@ -4,7 +4,7 @@ import AuthForm from "./AuthForm";
 const Login = ({email, setEmail, password, setPassword}) => {
   
   return (
-    <div className="login">
+    <div className="page">
       <AuthForm 
         title="Вход" 
         submitTitle="Войти"

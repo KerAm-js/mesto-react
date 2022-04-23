@@ -3,12 +3,18 @@
   font-size: 18px;
   line-height: 22px;
   color: #fff;
-  background: none;
-  border: none;
-  text-decoration: none;
-  cursor: pointer;
+  margin-top: 6px;
 }
 
 .header__account-button:hover {
   opacity: 0.6;
+}
+
+@media screen and (max-width: 410px) {
+  .header__account-button {
+    margin-top: 0;
+    margin-right: 30px;
+    font-size: 14px;
+    line-height: 17px;
+  }
 }

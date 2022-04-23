@@ -18,6 +18,7 @@ import InfoTooltip from "./InfoTooltip";
 function App() {
 
   const [loggedIn, setLoggedIn] = useState(false);
+  const [accountInfoVisible, setAccountInfoVisible] = useState(false);
   const [action, setAction] = useState(() => () => {});
   const [cards, setCards] = useState([]);
   const [infoTooltip, setInfoTooltip] = useState('');
@@ -122,6 +123,8 @@ function App() {
   const onAuthEmailChangeHandler = evt => setAuthEmail(evt.target.value);
   const onAuthPasswordChangeHandler = evt => setAuthPassword(evt.target.value);
 
+  const toggleAccountInfoVisible = () => setAccountInfoVisible(!accountInfoVisible);
+
   useEffect(() => {
     api.getUserData()
       .then(userData => setCurrentUser(userData))
@@ -133,85 +136,95 @@ function App() {
 
   return (
     <CurrentUserContext.Provider className="App" value={currentUser}>
-      <Header 
-        loggedIn={loggedIn}
-        email={authEmail}
-      />
-      <Switch>
-        <Route 
-          path="/sign-in" 
-        >
-          <Login 
-            email={authEmail} 
-            setEmail={onAuthEmailChangeHandler}
-            password={authPassword}
-            setPassword={onAuthPasswordChangeHandler} 
-          />
-        </Route>
-        <Route 
-          path="/sign-up" 
-        >
-          <Register 
-            email={authEmail} 
-            setEmail={onAuthEmailChangeHandler}
-            password={authPassword}
-            setPassword={onAuthPasswordChangeHandler} 
-          />
-        </Route>
-        <ProtectedRoute 
-          path="/"
+      <div className={`content ${
+            loggedIn 
+              ? accountInfoVisible ? 'content_account-info-visible' : ''
+              : 'content_account-info-visible'
+          }
+        `}
+      >
+        <Header 
           loggedIn={loggedIn}
-          component={Main}
-          cards={cards}
-          onCardDelete={handleCardDelete}
-          onCardLike={handleCardLike}
-          onEditAvatar={handleEditAvatarClick} 
-          onEditProfile={handleEditProfileClick} 
-          onAddPlace={handleAddPlaceClick} 
-          onCardClick={handleCardClick}
+          email={authEmail}
+          toggleAccountInfoVisible={toggleAccountInfoVisible}
+          accountInfoVisible={accountInfoVisible}
         />
-      </Switch>
-      
-      {
-        loggedIn && <Footer />
-      }
-      
-      <EditProfilePopup 
-        isOpened={isEditProfilePopupOpened}
-        onClose={closeAllPopups}
-        onUpdateUser={handleUpdateUser}
-      />
-
-      <EditAvatarPopup 
-        isOpened={isEditAvatarPopupOpened}
-        onClose={closeAllPopups}
-        onUpdateAvatar={handleUpdateAvatar}
-      />
-
-      <AddPlacePopup 
-        isOpened={isAddPlaceopupOpened}
-        onClose={closeAllPopups}
-        onAddPlace={handleAddPlace}
-      />
-
-      <ImagePopup selectedCard={selectedCard} onClose={closeAllPopups}/>
-
-      <ConfirmPopup 
-        onConfirm={handleActionConfirm}
-        onClose={closeConfirmPopupHanlder}
-        isOpened={isConfirmPopupOpened}
-      />
-
-      <InfoTooltip 
-        status={infoTooltip}
-        title={
-          infoTooltip === 'success' 
-            ? 'Вы успешно зарегистрировались!'
-            : 'Что-то пошло не так! Попробуйте ещё раз.'
+        <Switch>
+          <Route 
+            path="/sign-in" 
+          >
+            <Login 
+              email={authEmail} 
+              setEmail={onAuthEmailChangeHandler}
+              password={authPassword}
+              setPassword={onAuthPasswordChangeHandler} 
+            />
+          </Route>
+          <Route 
+            path="/sign-up" 
+          >
+            <Register 
+              email={authEmail} 
+              setEmail={onAuthEmailChangeHandler}
+              password={authPassword}
+              setPassword={onAuthPasswordChangeHandler} 
+            />
+          </Route>
+          <ProtectedRoute 
+            path="/"
+            loggedIn={loggedIn}
+            component={Main}
+            cards={cards}
+            onCardDelete={handleCardDelete}
+            onCardLike={handleCardLike}
+            onEditAvatar={handleEditAvatarClick} 
+            onEditProfile={handleEditProfileClick} 
+            onAddPlace={handleAddPlaceClick} 
+            onCardClick={handleCardClick}
+          />
+        </Switch>
+        
+        {
+          loggedIn && <Footer />
         }
-        isOpened={isInfoTooltipOpened}
-        onClose={closeAllPopups}
-      />
+        
+        <EditProfilePopup 
+          isOpened={isEditProfilePopupOpened}
+          onClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser}
+        />
+
+        <EditAvatarPopup 
+          isOpened={isEditAvatarPopupOpened}
+          onClose={closeAllPopups}
+          onUpdateAvatar={handleUpdateAvatar}
+        />
+
+        <AddPlacePopup 
+          isOpened={isAddPlaceopupOpened}
+          onClose={closeAllPopups}
+          onAddPlace={handleAddPlace}
+        />
+
+        <ImagePopup selectedCard={selectedCard} onClose={closeAllPopups}/>
+
+        <ConfirmPopup 
+          onConfirm={handleActionConfirm}
+          onClose={closeConfirmPopupHanlder}
+          isOpened={isConfirmPopupOpened}
+        />
+
+        <InfoTooltip 
+          status={infoTooltip}
+          title={
+            infoTooltip === 'success' 
+              ? 'Вы успешно зарегистрировались!'
+              : 'Что-то пошло не так! Попробуйте ещё раз.'
+          }
+          isOpened={isInfoTooltipOpened}
+          onClose={closeAllPopups}
+        />
+      </div>
     </CurrentUserContext.Provider>
   );
 }

@@ -8,7 +8,7 @@ const Register = ({
   setPassword,
 }) => {
   return (
-    <div className="register">
+    <div className="page">
       <AuthForm 
         title="Регистрация" 
         submitTitle="Зарегистрироваться"
