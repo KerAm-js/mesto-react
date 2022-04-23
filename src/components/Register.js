@@ -6,7 +6,9 @@ const Register = ({
   setEmail,
   password,
   setPassword,
+  register
 }) => {
+  
   return (
     <div className="page">
       <AuthForm 
@@ -16,6 +18,7 @@ const Register = ({
         onChangeEmail={setEmail}
         password={password}
         onChangePassword={setPassword}
+        onSubmit={register}
       />
     </div>
   )

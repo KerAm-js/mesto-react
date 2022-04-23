@@ -1,6 +1,3 @@
-.header__logo-wrapper {
-}
-
 @media screen and (max-width: 410px) {
   .header__logo-wrapper {
     height: 84px;

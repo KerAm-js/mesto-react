@@ -11,6 +11,11 @@ const AuthForm = ({
   onChangePassword
 }) => {
 
+  const submitHanlder = evt => {
+    evt.preventDefault();
+    onSubmit();
+  }
+
   return (
     <div className="auth">
       <h2 className="auth__title">{title}</h2>
@@ -33,7 +38,7 @@ const AuthForm = ({
           />
           <span className="form__error username-error">Заполните это поле</span>
         </div>
-        <button className="form__button form__button_type_auth" onClick={onSubmit}>{submitTitle}</button>
+        <button className="form__button form__button_type_auth" onClick={submitHanlder}>{submitTitle}</button>
       </form>
       <NavLink to="/sign-in" className={`link ${title === 'Регистрация' ? '' : 'link_hidden'}`}>Уже зарегистрированы? Войти</NavLink>
     </div>

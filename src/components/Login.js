@@ -1,7 +1,7 @@
 import React from "react";
 import AuthForm from "./AuthForm";
 
-const Login = ({email, setEmail, password, setPassword}) => {
+const Login = ({email, setEmail, password, setPassword, authorize}) => {
   
   return (
     <div className="page">
@@ -12,6 +12,7 @@ const Login = ({email, setEmail, password, setPassword}) => {
         onChangeEmail={setEmail}
         password={password}
         onChangePassword={setPassword}
+        onSubmit={authorize}
       />
     </div>
   )

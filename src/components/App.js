@@ -14,10 +14,13 @@ import { Route, Switch } from "react-router-dom";
 import Register from "./Register";
 import ProtectedRoute from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
+import { auth, reg, authWithJWT } from "../utils/auth";
+import { useHistory } from "react-router-dom";
 
 function App() {
 
   const [loggedIn, setLoggedIn] = useState(false);
+  const [currentUserEmail, setCurrentUserEmail] = useState('');
   const [accountInfoVisible, setAccountInfoVisible] = useState(false);
   const [action, setAction] = useState(() => () => {});
   const [cards, setCards] = useState([]);
@@ -30,6 +33,8 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
+  const [registerEmail, setRegisterEmail] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
   const [currentUser, setCurrentUser] = useState({
     name: '',
     avatar: '',
@@ -37,6 +42,8 @@ function App() {
     _id: '',
     cohort: '',
   });
+
+  const history = useHistory();
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpened(true);
@@ -122,6 +129,67 @@ function App() {
 
   const onAuthEmailChangeHandler = evt => setAuthEmail(evt.target.value);
   const onAuthPasswordChangeHandler = evt => setAuthPassword(evt.target.value);
+  const clearAuthInputs = () => {
+    setAuthEmail('');
+    setAuthPassword('');
+  }
+
+  const onRegisterEmailChangeHandler = evt => setRegisterEmail(evt.target.value);
+  const onRegisterPasswordChangeHandler = evt => setRegisterPassword(evt.target.value);
+  const clearRegisterInputs = () => {
+    setRegisterEmail('');
+    setRegisterPassword('');
+  }
+
+  const authorise = () => {
+    auth(authEmail, authPassword)
+      .then(res => {
+        if (res.token) {
+          clearAuthInputs()
+          setCurrentUserEmail(authEmail)
+          localStorage.setItem('jwt', res.token)
+          setLoggedIn(true)
+          history.push('/')
+        }
+      })
+      .catch(e => console.log(e))
+  }
+
+  const register = () => {
+    reg(registerEmail, registerPassword) 
+      .then(res => {
+        console.log(res)
+        clearRegisterInputs()
+        setAuthEmail(res.data.email)
+        history.push('/signin')
+      })
+      .catch(e => console.log(e))
+  }
+
+  const autoAuth = () => {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      authWithJWT(jwt)
+        .then(res => {
+          if (res.data.email) {
+            setCurrentUserEmail(res.data.email)
+            console.log(res.data.email);
+            setLoggedIn(true)
+            history.push('/')
+          }
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
+  }
+
+  const logout = () => {
+    localStorage.removeItem('jwt');
+    setCurrentUserEmail('');
+    setLoggedIn(false);
+    history.push('/sign-in');
+  }
 
   const toggleAccountInfoVisible = () => setAccountInfoVisible(!accountInfoVisible);
 
@@ -132,6 +200,7 @@ function App() {
     api.getCards()
       .then(cards => setCards(cards))
       .catch(e => console.log(e))
+    autoAuth();
   }, [])
 
   return (
@@ -145,7 +214,8 @@ function App() {
       >
         <Header 
           loggedIn={loggedIn}
-          email={authEmail}
+          email={currentUserEmail}
+          logout={logout}
           toggleAccountInfoVisible={toggleAccountInfoVisible}
           accountInfoVisible={accountInfoVisible}
         />
@@ -158,16 +228,18 @@ function App() {
               setEmail={onAuthEmailChangeHandler}
               password={authPassword}
               setPassword={onAuthPasswordChangeHandler} 
+              authorize={authorise}
             />
           </Route>
           <Route 
             path="/sign-up" 
           >
             <Register 
-              email={authEmail} 
-              setEmail={onAuthEmailChangeHandler}
-              password={authPassword}
-              setPassword={onAuthPasswordChangeHandler} 
+              email={registerEmail} 
+              setEmail={onRegisterEmailChangeHandler}
+              password={registerPassword}
+              setPassword={onRegisterPasswordChangeHandler} 
+              register={register}
             />
           </Route>
           <ProtectedRoute 
